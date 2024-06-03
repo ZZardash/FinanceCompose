@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "835235860552",
+    "project_id": "financecompose-ead33",
+    "storage_bucket": "financecompose-ead33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835235860552:android:5d5d5b8af77969042d487d",
+        "android_client_info": {
+          "package_name": "com.example.financecompose"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "835235860552-njgh55i2f09i019gj1og68scmpcvlu08.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.financecompose",
+            "certificate_hash": "29971d938aa4f3db1a5622d6f2e16733d668e2d8"
+          }
+        },
+        {
+          "client_id": "835235860552-trmiaks3584r6j1khteig6s7s7g1jqh9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZhfj9krrxOIh87yHFkDkd37vU-KH-n6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "835235860552-trmiaks3584r6j1khteig6s7s7g1jqh9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
