@@ -1,5 +1,5 @@
 
-package com.example.financecompose.presentation.entrance.intro.ui
+package com.example.financecompose.presentation.home.ui
 
 import androidx.compose.runtime.*
 import androidx.navigation.NavController

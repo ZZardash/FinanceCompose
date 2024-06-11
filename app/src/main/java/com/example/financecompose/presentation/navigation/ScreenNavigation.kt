@@ -8,9 +8,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.financecompose.presentation.ui.ChildLoginScreen
+import com.example.financecompose.presentation.entrance.child_login.ui.ChildLoginScreen
 import com.example.financecompose.presentation.entrance.forgot_password.ui.ForgotPasswordScreen
-import com.example.financecompose.presentation.entrance.intro.ui.GoogleSignInScreen
+import com.example.financecompose.presentation.home.ui.GoogleSignInScreen
 import com.example.financecompose.presentation.entrance.login.ui.LoginScreen
 import com.example.financecompose.presentation.entrance.intro.ui.IntroScreen
 import com.example.financecompose.presentation.entrance.intro.ui.ProfileScreen
@@ -31,7 +31,7 @@ fun ScreensNavigation() {
     val startDestination = if (isFirstRun(context)) {
         Screen.IntroScreen.route
     } else {
-        Screen.LoginScreen.route // or any other screen you want as the default for subsequent runs
+        Screen.IntroScreen.route // or any other screen you want as the default for subsequent runs
     }
 
     NavHost(navController = navController, startDestination = startDestination) {

@@ -1,4 +1,4 @@
-package com.example.financecompose.presentation.ui
+package com.example.financecompose.presentation.entrance.child_login.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

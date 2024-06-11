@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.financecompose.R
 import com.example.financecompose.presentation.components.EntranceTextField
+import com.example.financecompose.presentation.components.PasswordValidator
 import com.example.financecompose.presentation.entrance.register.viewmodel.RegisterScreenEvent
 import com.example.financecompose.presentation.entrance.register.viewmodel.RegisterViewModel
 import com.example.financecompose.presentation.navigation.Screen
@@ -98,7 +99,7 @@ fun RegisterScreen(
                     shape = RoundedCornerShape(50.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(500.dp)
+                        .wrapContentHeight()
                 ) {
                     Column(
                         modifier = Modifier.padding(15.dp),
@@ -150,7 +151,7 @@ fun RegisterScreen(
 
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        // Password input
+                        //Password input
                         EntranceTextField(
                             stringState = passwordState,
                             text = stringResource(R.string.password),
@@ -160,8 +161,11 @@ fun RegisterScreen(
                             leadingIcon = Icons.Default.Lock,
                             leadIconDesc = stringResource(R.string.lock_icon)
                         )
+                        Spacer(modifier = Modifier.height(5.dp))
 
-                        Spacer(modifier = Modifier.height(50.dp))
+                        PasswordValidator(passwordState)
+
+                        Spacer(modifier = Modifier.height(35.dp))
 
                         // Sign up button
                         Button(

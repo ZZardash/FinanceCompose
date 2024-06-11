@@ -11,7 +11,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class IntroViewModel @Inject constructor(
-    private val repository: FinanceRepository,
     private val auth: FirebaseAuth,
     private val db: FirebaseFirestore,
 ) : ViewModel() {

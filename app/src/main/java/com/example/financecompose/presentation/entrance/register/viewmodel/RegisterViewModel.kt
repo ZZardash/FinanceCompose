@@ -12,6 +12,7 @@ import com.example.financecompose.util.CurrentDate
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,15 +38,15 @@ class RegisterViewModel @Inject constructor(
 
                     println("RegisterViewModel: Firebase User ID is $firebaseUserId")
 
+                    val userId = UUID.randomUUID().toString()
                     val user = User(
+                        userId,
                         userFirstName = name,
                         userLastName = null,
                         userEmail = email,
                         userCreationDate = CurrentDate().getFormattedDate()
                     )
-
-                    println("RegisterViewModel: Saving user to Room")
-                    saveUserToRoom(user, firebaseUserId)
+                    saveUserToFirestore(user, userId)
                 }
                 .addOnFailureListener { exception ->
                     println("RegisterViewModel: Failed to create user - ${exception.localizedMessage}")
@@ -53,17 +54,6 @@ class RegisterViewModel @Inject constructor(
                 }
         }
 
-    private fun saveUserToRoom(user: User, firebaseUserId: String) {
-        viewModelScope.launch {
-            val userId = repository.insertUser(user)
-            println("RegisterViewModel: Saved user to Room with ID $userId")
-
-            val userWithId = user.copy(userId = userId)
-
-            println("RegisterViewModel: Saving user to Firestore")
-            saveUserToFirestore(userWithId, firebaseUserId)
-        }
-    }
 
     private fun saveUserToFirestore(user: User, firebaseUserId: String) {
         val docRef = db.collection("users").document(firebaseUserId)

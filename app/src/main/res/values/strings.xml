@@ -28,4 +28,8 @@
     <string name="parent_email">Parent Email</string>
     <string name="password_icon">Password icon</string>
     <string name="web_client_id">835235860552-trmiaks3584r6j1khteig6s7s7g1jqh9.apps.googleusercontent.com</string>
+    <string name="show_password">show password\n</string>
+    <string name="password_valid">password valid\n</string>
+    <string name="password_invalid">password invalid\n</string>
+    <string name="password_requirements">password requirements\n</string>
 </resources>

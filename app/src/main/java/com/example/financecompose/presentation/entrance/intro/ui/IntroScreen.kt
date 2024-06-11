@@ -95,7 +95,7 @@ fun IntroScreen(
                 Toast.LENGTH_LONG
             ).show()
 
-            navController.navigate(Screen.GoogleSignInScreen.route)
+            navController.navigate(Screen.ProfileScreen.route)
             viewModel.resetState()
         }
     }

@@ -13,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
-    private val repository: FinanceRepository,
     private val auth: FirebaseAuth,
 ) : ViewModel() {
 

@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Immutable
 data class User(
-    val userId: Long? = null,
+    val userId: String?,
     val userFirstName: String?,
     val userLastName: String? = null,
     val userEmail: String?,
