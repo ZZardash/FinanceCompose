@@ -33,12 +33,10 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.financecompose.R
-import com.example.financecompose.presentation.components.EntranceTextField
+import com.example.financecompose.presentation.components.CustomIconTextField
 import com.example.financecompose.presentation.entrance.forgot_password.viewmodel.ForgotPasswordScreenEvent
 import com.example.financecompose.presentation.entrance.forgot_password.viewmodel.ForgotPasswordViewModel
 import com.example.financecompose.presentation.navigation.Screen
@@ -119,7 +117,7 @@ fun ForgotPasswordScreen(
 
 
                         // Email input
-                        EntranceTextField(
+                        CustomIconTextField(
                             stringState = emailState,
                             text = stringResource(id = R.string.email),
                             fontFamily = FontFamily(Font(R.font.kanit)),

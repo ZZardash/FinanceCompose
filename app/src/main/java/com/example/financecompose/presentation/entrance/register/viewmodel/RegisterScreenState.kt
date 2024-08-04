@@ -9,5 +9,6 @@ data class RegisterScreenState(
     val password: String = "",
     val emailError: String? = null,
     val errorMessage: String? = null,
-    val successMessage: String? = null
+    val successMessage: String? = null,
+    val isRegistered: Boolean = false,
 )

@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import com.example.financecompose.R
+import com.example.financecompose.domain.model.User
+import com.example.financecompose.util.CurrentDate
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -20,40 +22,46 @@ class GoogleAuthUiClient(
     private val auth = Firebase.auth
 
     suspend fun signIn(): IntentSender? {
-        val result = try {
-            oneTapClient.beginSignIn(
-                buildSignInRequest()
-            ).await()
-        } catch(e: Exception) {
+        return try {
+            val result = oneTapClient.beginSignIn(buildSignInRequest()).await()
+            result?.pendingIntent?.intentSender
+        } catch (e: Exception) {
             e.printStackTrace()
-            if(e is CancellationException) throw e
+            if (e is CancellationException) throw e
             null
         }
-        return result?.pendingIntent?.intentSender
     }
 
-    suspend fun signInWithIntent(intent: Intent): SignInResult {
+    suspend fun signInWithIntent(intent: Intent): GoogleSignInResult {
         val credential = oneTapClient.getSignInCredentialFromIntent(intent)
         val googleIdToken = credential.googleIdToken
         val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
         return try {
-            val user = auth.signInWithCredential(googleCredentials).await().user
-            SignInResult(
+            val authResult = auth.signInWithCredential(googleCredentials).await()
+            val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
+            val user = authResult.user
+            GoogleSignInResult(
                 data = user?.run {
-                    UserData(
+                    User(
                         userId = uid,
-                        username = displayName,
-                        profilePictureUrl = photoUrl?.toString()
+                        userName = displayName,
+                        userEmail = email,
+                        userProfilePhoto = photoUrl.toString(), // Fetch profile photo URL
+                        userCreationDate = CurrentDate().getFormattedDate()
                     )
                 },
-                errorMessage = null
+                errorMessage = null,
+                isNewUser = isNewUser,
+                isSuccess = true
             )
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
-            if(e is CancellationException) throw e
-            SignInResult(
+            if (e is CancellationException) throw e
+            GoogleSignInResult(
                 data = null,
-                errorMessage = e.message
+                errorMessage = e.message,
+                isNewUser = false,
+                isSuccess = false
             )
         }
     }
@@ -62,17 +70,19 @@ class GoogleAuthUiClient(
         try {
             oneTapClient.signOut().await()
             auth.signOut()
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
-            if(e is CancellationException) throw e
+            if (e is CancellationException) throw e
         }
     }
 
-    fun getSignedInUser(): UserData? = auth.currentUser?.run {
-        UserData(
+    fun getSignedInUser(): User? = auth.currentUser?.run {
+        User(
             userId = uid,
-            username = displayName,
-            profilePictureUrl = photoUrl?.toString()
+            userName = displayName,
+            userEmail = email,
+            userProfilePhoto = photoUrl.toString(), // Fetch profile photo URL
+            userCreationDate = CurrentDate().getFormattedDate()
         )
     }
 
@@ -81,7 +91,7 @@ class GoogleAuthUiClient(
             .setGoogleIdTokenRequestOptions(
                 GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
-                    .setFilterByAuthorizedAccounts(true)
+                    .setFilterByAuthorizedAccounts(false) // Set to false for initial sign-in
                     .setServerClientId(context.getString(R.string.web_client_id))
                     .build()
             )

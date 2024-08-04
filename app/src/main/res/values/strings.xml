@@ -32,4 +32,26 @@
     <string name="password_valid">password valid\n</string>
     <string name="password_invalid">password invalid\n</string>
     <string name="password_requirements">password requirements\n</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_icon">Sign In Icon</string>
+    <string name="sign_up_icon">Sign Up Icon</string>
+    <string name="preferences">Preferences</string>
+    <string name="welcome_back">Welcome back</string>
+    <string name="select_your_preferences">Select your\n\npreferences</string>
+    <string name="t_continue">Continue</string>
+    <string name="already_have_an_account_log_in">Already have an account? Log In</string>
+    <string name="balance">Starting Balance</string>
+    <string name="balance_icon">Balance icon</string>
+    <string name="available_balance">Available Balance</string>
+    <string name="home">Home</string>
+    <string name="children">Children</string>
+    <string name="add">Add</string>
+    <string name="reports">Reports</string>
+    <string name="settings">Settings</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="one_time">One\nTime</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="new_category">New Category</string>
 </resources>

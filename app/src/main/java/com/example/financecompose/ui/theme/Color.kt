@@ -19,11 +19,26 @@ val Seapl = Color(0xFFB2AECD)
 val Pinkple = Color(0xFFA680AE)
 
 val TextColor = Color(0xFF49454F)
+val SymbolGray = Color(0xFF44474F)
+
+//val Purple90 = Color(0xFF6D31ED)
+val Purple90 = Color(0xFF004970)
+val Gray90 = Color(0xFFF5F1FE)
+val Gray50 = Color (0xFFBDC1CA)
 
 val gradientBrush: Brush = Brush.linearGradient(
     colors = listOf(
         SeaBlue,
         Pinkple
+    ),
+    start = Offset(Float.POSITIVE_INFINITY, 0f),
+    end = Offset(0f, Float.POSITIVE_INFINITY)
+)
+
+val homeGradientBrush: Brush = Brush.linearGradient(
+    colors = listOf(
+        SeaBlue,
+        Seapl
     ),
     start = Offset(Float.POSITIVE_INFINITY, 0f),
     end = Offset(0f, Float.POSITIVE_INFINITY)

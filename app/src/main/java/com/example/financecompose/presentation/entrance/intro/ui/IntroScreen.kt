@@ -29,11 +29,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,29 +43,32 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.financecompose.R
 import com.example.financecompose.presentation.navigation.Screen
 import com.example.financecompose.ui.theme.Seapl
-import com.example.financecompose.ui.theme.TextColor
 import com.example.financecompose.ui.theme.gradientBrush
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.financecompose.presentation.components.ButtonContent
+import com.example.financecompose.presentation.components.CustomButton
 import com.example.financecompose.presentation.entrance.intro.viewmodel.GoogleAuthUiClient
-import com.example.financecompose.presentation.entrance.intro.viewmodel.SignInViewModel
+import com.example.financecompose.presentation.entrance.intro.viewmodel.GoogleSignInViewModel
+import com.example.financecompose.ui.theme.TextColor
 import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun IntroScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: GoogleSignInViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-
-    val viewModel = viewModel<SignInViewModel>()
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsState()
 
     val googleAuthUiClient by lazy {
         GoogleAuthUiClient(
@@ -76,33 +80,33 @@ fun IntroScreen(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult(),
         onResult = { result ->
-            if(result.resultCode == RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 viewModel.viewModelScope.launch {
                     val signInResult = googleAuthUiClient.signInWithIntent(
                         intent = result.data ?: return@launch
                     )
                     viewModel.onSignInResult(signInResult)
                 }
+            } else {
+                // Handle cancel or failure
+                Toast.makeText(context, "Sign-in failed", Toast.LENGTH_SHORT).show()
             }
         }
     )
 
-    LaunchedEffect(key1 = state.isSignInSuccessful) {
-        if(state.isSignInSuccessful) {
-            Toast.makeText(
-                context,
-                "Sign in successful",
-                Toast.LENGTH_LONG
-            ).show()
-
-            navController.navigate(Screen.ProfileScreen.route)
+    LaunchedEffect(key1 = state.isNewUser, key2 = state.isSignInSuccessful) {
+        if (state.isNewUser) {
+            navController.navigate(Screen.PreferencesScreen.route)
+            viewModel.resetState()
+        } else if (state.isSignInSuccessful) {
+            navController.navigate(Screen.HomeScreen.route)
             viewModel.resetState()
         }
     }
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Scaffold {
-            Column (
+            Column(
                 horizontalAlignment = CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
                 modifier = Modifier
@@ -110,44 +114,42 @@ fun IntroScreen(
                     .padding(it)
                     .padding(20.dp)
                     .fillMaxSize()
-            ){
-                IconButton(onClick = {
-                    //Language Menu appears
-                }, modifier = Modifier.align(End)) {
-                    Icon(painter = painterResource(
-                        id = R.drawable.baseline_language_24
-                    ),
+            ) {
+                IconButton(
+                    onClick = {
+                        // Language Menu appears
+                    },
+                    modifier = Modifier.align(End)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_language_24),
                         contentDescription = stringResource(R.string.language)
                     )
                 }
 
-
-                Image(
-                    painter = painterResource(id = R.drawable.intro_image),
-                    contentDescription = stringResource(R.string.intro_image),
-                    alignment = Alignment.TopCenter
+                val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.intro_animation))
+                LottieAnimation(
+                    composition,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp),
+                    iterations = LottieConstants.IterateForever
                 )
-
-                Spacer(modifier = Modifier.height(50.dp))
 
                 Card(
                     shape = RoundedCornerShape(50.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(350.dp)
-
-                ){
+                ) {
                     Column(
                         modifier = Modifier
                             .padding(20.dp)
                             .fillMaxWidth()
-
                     ) {
-                        Column (
-                            modifier = Modifier
-                                .align(CenterHorizontally)
-
-                        ){
+                        Column(
+                            modifier = Modifier.align(CenterHorizontally)
+                        ) {
                             Text(
                                 text = stringResource(R.string.financely),
                                 fontSize = 50.sp,
@@ -166,11 +168,12 @@ fun IntroScreen(
 
                         Spacer(modifier = Modifier.height(40.dp))
 
-                        Column (
+                        Column(
                             modifier = Modifier
                                 .align(CenterHorizontally)
                                 .padding(10.dp)
-                        ){
+                        ) {
+
                             OutlinedButton(
                                 onClick = {
                                     viewModel.viewModelScope.launch {
@@ -186,13 +189,13 @@ fun IntroScreen(
                                     .fillMaxWidth()
                                     .align(CenterHorizontally)
                             )
-                             {
+                            {
                                 Image(
                                     painter = painterResource(id = R.drawable.google),
                                     contentDescription = stringResource(R.string.google_icon),
                                     modifier = Modifier.width(30.dp)
                                 )
-                                 Spacer(modifier = Modifier.width(8.dp))
+                                Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = stringResource(R.string.continue_with_google),
                                     fontFamily = FontFamily(Font(R.font.kanit)),

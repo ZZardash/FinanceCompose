@@ -1,5 +1,6 @@
 package com.example.financecompose.data.firebase
 
+import com.example.financecompose.domain.model.User
 import com.example.financecompose.domain.repository.FinanceRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -15,4 +16,19 @@ class FinanceRepositoryImpl(
             .await()
         return !querySnapshot.isEmpty
     }
+    override suspend fun getUser(userId: String): User? {
+        val document = firestore.collection("users").document(userId).get().await()
+        return if (document.exists()) {
+            document.toObject(User::class.java)
+        } else {
+            null
+        }
+    }
+
+    override suspend fun createUser(userData: User): User {
+        val userDocument = userData.userId?.let { firestore.collection("users").document(it.toString()) }
+        userDocument?.set(userData)?.await()
+        return userData
+    }
+
 }

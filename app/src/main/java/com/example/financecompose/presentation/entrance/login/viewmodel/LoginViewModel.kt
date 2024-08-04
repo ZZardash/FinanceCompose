@@ -4,13 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.financecompose.domain.repository.FinanceRepository
-import com.example.financecompose.presentation.entrance.register.viewmodel.RegisterScreenEvent
-import com.example.financecompose.presentation.entrance.register.viewmodel.RegisterScreenState
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +26,10 @@ class LoginViewModel @Inject constructor(
                         println("LoginViewModel: User logged in successfully")
                     }
                     .addOnFailureListener { exception ->
-                        _uiState.value = _uiState.value.copy(errorMessage = exception.localizedMessage)
+                        _uiState.value = _uiState.value.copy(
+                            errorMessage = exception.localizedMessage,
+                            matchError = "*Check your email and password"
+                            )
                         println("LoginViewModel: Login failed - ${exception.localizedMessage}")
                     }
             }

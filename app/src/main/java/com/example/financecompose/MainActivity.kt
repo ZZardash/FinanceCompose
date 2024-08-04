@@ -3,7 +3,8 @@ package com.example.financecompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.financecompose.presentation.navigation.ScreensNavigation
+import androidx.navigation.compose.rememberNavController
+import com.example.financecompose.presentation.menu.add.ui.AddScreen
 import com.example.financecompose.ui.theme.FinanceComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -11,9 +12,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
+            val navController = rememberNavController()
             FinanceComposeTheme{
-                ScreensNavigation()
+                //ScreensNavigation()
+                AddScreen(navController)
             }
         }
     }

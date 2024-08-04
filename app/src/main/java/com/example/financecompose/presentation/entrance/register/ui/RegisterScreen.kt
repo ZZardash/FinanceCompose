@@ -36,7 +36,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.financecompose.R
-import com.example.financecompose.presentation.components.EntranceTextField
+import com.example.financecompose.presentation.components.CustomIconTextField
 import com.example.financecompose.presentation.components.PasswordValidator
 import com.example.financecompose.presentation.entrance.register.viewmodel.RegisterScreenEvent
 import com.example.financecompose.presentation.entrance.register.viewmodel.RegisterViewModel
@@ -56,6 +56,10 @@ fun RegisterScreen(
     val passwordState = remember { mutableStateOf("") }
 
     val state = viewModel.uiState.value
+
+    if (state.isRegistered) {
+        navController.navigate(Screen.PreferencesScreen.route)
+    }
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Scaffold { paddingValue ->
@@ -117,7 +121,7 @@ fun RegisterScreen(
                         Spacer(modifier = Modifier.height(40.dp))
 
                         //Name input
-                        EntranceTextField(
+                        CustomIconTextField(
                             stringState = nameState,
                             text = stringResource(R.string.name),
                             fontFamily = FontFamily(Font(R.font.kanit)),
@@ -130,7 +134,7 @@ fun RegisterScreen(
                         Spacer(modifier = Modifier.height(10.dp))
 
                         // Email input
-                        EntranceTextField(
+                        CustomIconTextField(
                             stringState = emailState,
                             text = stringResource(R.string.email),
                             fontFamily = FontFamily(Font(R.font.kanit)),
@@ -152,7 +156,7 @@ fun RegisterScreen(
                         Spacer(modifier = Modifier.height(10.dp))
 
                         //Password input
-                        EntranceTextField(
+                        CustomIconTextField(
                             stringState = passwordState,
                             text = stringResource(R.string.password),
                             fontFamily = FontFamily(Font(R.font.kanit)),

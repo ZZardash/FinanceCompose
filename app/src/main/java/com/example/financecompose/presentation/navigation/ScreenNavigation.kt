@@ -1,62 +1,50 @@
 package com.example.financecompose.presentation.navigation
 
-import android.content.Context
 import android.widget.Toast
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.financecompose.presentation.entrance.intro.ui.IntroScreen
+import com.example.financecompose.presentation.entrance.login.ui.LoginScreen
 import com.example.financecompose.presentation.entrance.child_login.ui.ChildLoginScreen
 import com.example.financecompose.presentation.entrance.forgot_password.ui.ForgotPasswordScreen
-import com.example.financecompose.presentation.home.ui.GoogleSignInScreen
-import com.example.financecompose.presentation.entrance.login.ui.LoginScreen
-import com.example.financecompose.presentation.entrance.intro.ui.IntroScreen
-import com.example.financecompose.presentation.entrance.intro.ui.ProfileScreen
-import com.example.financecompose.presentation.entrance.intro.viewmodel.GoogleAuthUiClient
+import com.example.financecompose.presentation.entrance.preferences.ui.PreferencesScreen
 import com.example.financecompose.presentation.entrance.register.ui.RegisterScreen
+import com.example.financecompose.presentation.menu.home.ui.ProfileScreen
+import com.example.financecompose.presentation.entrance.intro.viewmodel.GoogleAuthUiClient
+import com.example.financecompose.presentation.menu.navbar.MainScreenWithNavBar
 import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.launch
 
 @Composable
 fun ScreensNavigation() {
-
     val navController = rememberNavController()
     val coroutineScope = rememberCoroutineScope()
-
     val context = LocalContext.current
 
-    // Determine the start destination based on whether it's the first run
-    val startDestination = if (isFirstRun(context)) {
-        Screen.IntroScreen.route
-    } else {
-        Screen.IntroScreen.route // or any other screen you want as the default for subsequent runs
-    }
+    NavHost(
+        navController = navController,
+        startDestination = Screen.IntroScreen.route
+    ) {
+        composable(Screen.IntroScreen.route) { IntroScreen(navController) }
+        addComposable(Screen.LoginScreen.route, navController) { LoginScreen(navController) }
+        addComposable(Screen.ChildLoginScreen.route, navController) { ChildLoginScreen(navController) }
+        addComposable(Screen.ForgotPasswordScreen.route, navController) { ForgotPasswordScreen(navController) }
+        addComposable(Screen.RegisterScreen.route, navController) { RegisterScreen(navController) }
+        addComposable(Screen.PreferencesScreen.route, navController) { PreferencesScreen(navController) }
+        addComposable(Screen.HomeScreen.route, navController) { MainScreenWithNavBar() }
 
-    NavHost(navController = navController, startDestination = startDestination) {
-        composable(Screen.IntroScreen.route) {
-            IntroScreen(navController)
-        }
-        composable(Screen.LoginScreen.route) {
-            LoginScreen(navController)
-        }
-        composable(Screen.ChildLoginScreen.route) {
-            ChildLoginScreen(navController)
-        }
-        composable(Screen.ForgotPasswordScreen.route) {
-            ForgotPasswordScreen(navController)
-        }
-        composable(Screen.RegisterScreen.route) {
-            RegisterScreen(navController)
-        }
-        composable(Screen.GoogleSignInScreen.route) {
-            GoogleSignInScreen(navController)
-        }
+
         composable(Screen.ProfileScreen.route) {
             val googleAuthUiClient = GoogleAuthUiClient(
                 context = context,
-
                 oneTapClient = Identity.getSignInClient(context)
             )
             ProfileScreen(
@@ -77,14 +65,16 @@ fun ScreensNavigation() {
     }
 }
 
-fun isFirstRun(context: Context): Boolean {
-    val sharedPreferences = context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-    val isFirstRun = sharedPreferences.getBoolean("isFirstRun", true)
-    if (isFirstRun) {
-        with(sharedPreferences.edit()) {
-            putBoolean("isFirstRun", false)
-            apply()
+fun NavGraphBuilder.addComposable(route: String, navController: NavController, content: @Composable () -> Unit) {
+    composable(
+        route = route,
+        enterTransition = {
+            fadeIn(animationSpec = tween(500)) + scaleIn(initialScale = 0.8f, animationSpec = tween(500))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(500)) + scaleOut(targetScale = 0.8f, animationSpec = tween(500))
         }
+    ) {
+        content()
     }
-    return isFirstRun
 }

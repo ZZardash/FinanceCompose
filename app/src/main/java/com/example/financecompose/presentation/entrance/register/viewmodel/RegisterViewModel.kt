@@ -1,6 +1,5 @@
 package com.example.financecompose.presentation.entrance.register.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -41,8 +40,7 @@ class RegisterViewModel @Inject constructor(
                     val userId = UUID.randomUUID().toString()
                     val user = User(
                         userId,
-                        userFirstName = name,
-                        userLastName = null,
+                        userName = name,
                         userEmail = email,
                         userCreationDate = CurrentDate().getFormattedDate()
                     )
@@ -50,17 +48,17 @@ class RegisterViewModel @Inject constructor(
                 }
                 .addOnFailureListener { exception ->
                     println("RegisterViewModel: Failed to create user - ${exception.localizedMessage}")
-                    _uiState.value = _uiState.value.copy(errorMessage = exception.localizedMessage)
+                    _uiState.value = _uiState.value.copy(emailError = exception.localizedMessage)
                 }
         }
 
 
     private fun saveUserToFirestore(user: User, firebaseUserId: String) {
-        val docRef = db.collection("users").document(firebaseUserId)
+        val docRef = db.collection("users").document(firebaseUserId.toString())
         println("RegisterViewModel: Firestore User ID: ${user.userId}")
         docRef.set(user)
             .addOnSuccessListener {
-                _uiState.value = _uiState.value.copy(successMessage = "User registered successfully")
+                _uiState.value = _uiState.value.copy(successMessage = "User registered successfully", isRegistered = true)
                 println("RegisterViewModel: User saved to Firestore successfully")
             }
             .addOnFailureListener { exception ->
@@ -83,14 +81,24 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
     fun onEvent(event: RegisterScreenEvent) {
         when (event) {
             is RegisterScreenEvent.RegisterUser -> {
                 viewModelScope.launch {
-                    if (repository.isEmailExists(event.userMail)){
+                    /*
+                    if (repository.isEmailExists(event.userMail)) {
                         _uiState.value = _uiState.value.copy(emailError = "*This email is already in use")
                     }
-                    else{
+
+                     */
+                    if (!isValidEmail(event.userMail)) {
+                        _uiState.value = _uiState.value.copy(emailError = "*This email is not valid")
+                    }
+                    else {
                         _uiState.value = _uiState.value.copy(emailError = null)
                         registerUser(
                             event.userName,
