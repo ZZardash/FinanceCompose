@@ -34,7 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,8 +53,6 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.financecompose.presentation.components.ButtonContent
-import com.example.financecompose.presentation.components.CustomButton
 import com.example.financecompose.presentation.entrance.intro.viewmodel.GoogleAuthUiClient
 import com.example.financecompose.presentation.entrance.intro.viewmodel.GoogleSignInViewModel
 import com.example.financecompose.ui.theme.TextColor
@@ -132,7 +129,7 @@ fun IntroScreen(
                     composition,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(400.dp),
+                        .height(380.dp),
                     iterations = LottieConstants.IterateForever
                 )
 
@@ -141,10 +138,11 @@ fun IntroScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(350.dp)
+                        .padding(bottom = 30.dp)
                 ) {
                     Column(
                         modifier = Modifier
-                            .padding(20.dp)
+                            .padding(30.dp)
                             .fillMaxWidth()
                     ) {
                         Column(

@@ -84,7 +84,7 @@ fun PreferencesScreen(
                             Spacer(modifier = Modifier.height(20.dp))
 
                             CurrencyDropdownMenu(
-                                selectedCurrency = selectedCurrency,
+                                selectedCurrency = "USD".also { selectedCurrency = it },
                                 onCurrencySelected = { selectedCurrency = it }
                             )
 

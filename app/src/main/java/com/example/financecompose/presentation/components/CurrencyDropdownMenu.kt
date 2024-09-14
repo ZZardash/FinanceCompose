@@ -27,11 +27,13 @@ fun CurrencyDropdownMenu(
     selectedCurrency: String,
     onCurrencySelected: (String) -> Unit,
     showDisplayName: Boolean = true,
+    initSelectedOption: Boolean = false,
+    showIcon: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
-    var selectedOption by remember { mutableStateOf(Currency.USD.code) }
+    var selectedOption by remember { mutableStateOf(selectedCurrency) }
 
     Box(
         modifier = modifier
@@ -46,17 +48,20 @@ fun CurrencyDropdownMenu(
                 .height(57.dp)
                 .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f), RoundedCornerShape(5.dp))
                 .clickable { expanded = true }
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 8.dp)
         ) {
             Row(
                 modifier = Modifier.align(Alignment.Center),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.List,
-                    contentDescription = "Currency icon",
-                    modifier = Modifier.size(24.dp).alpha(0.8f)
-                )
+                if (showIcon) { // Conditionally show the List icon
+                    Icon(
+                        imageVector = Icons.Default.List,
+                        contentDescription = "Currency icon",
+                        modifier = Modifier.size(24.dp).alpha(0.5f)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = selectedOption,

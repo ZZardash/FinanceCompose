@@ -1,4 +1,4 @@
-package com.example.financecompose.presentation.menu.add.viewmodel
+package com.example.financecompose.presentation.menu.transaction.ui
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -25,14 +25,16 @@ import com.example.financecompose.R
 import com.example.financecompose.ui.theme.Gray50
 
 @Composable
-fun SelectableOptionsRow() {
-    var selectedOption by remember { mutableStateOf("One\nTime") }
-
+fun SelectableOptionsRow(
+    selectedCycle: String,
+    onCycleSelected: (String) -> Unit
+) {
+    // Map the display text to the actual cycle value
     val options = listOf(
-        stringResource(R.string.one_time) to R.drawable.one_time,
-        stringResource(R.string.daily) to R.drawable.daily,
-        stringResource(R.string.weekly) to R.drawable.weekly,
-        stringResource(R.string.monthly) to R.drawable.monthly
+        stringResource(R.string.one_time) to "one_time",
+        stringResource(R.string.daily) to "daily",
+        stringResource(R.string.weekly) to "weekly",
+        stringResource(R.string.monthly) to "monthly"
     )
 
     Box(
@@ -49,8 +51,8 @@ fun SelectableOptionsRow() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             options.forEachIndexed { index, pair ->
-                val (text, drawable) = pair
-                val isSelected = selectedOption == text
+                val (text, cycleValue) = pair
+                val isSelected = selectedCycle == cycleValue
                 val backgroundColor by animateColorAsState(
                     targetValue = if (isSelected) Color.Gray else Color.Transparent
                 )
@@ -60,7 +62,7 @@ fun SelectableOptionsRow() {
                         .weight(1f)
                         .pointerInput(Unit) {
                             detectTapGestures(onTap = {
-                                selectedOption = text
+                                onCycleSelected(cycleValue)
                             })
                         }
                         .padding(horizontal = 2.dp)
@@ -73,7 +75,13 @@ fun SelectableOptionsRow() {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        painter = painterResource(id = drawable),
+                        painter = painterResource(id = when (cycleValue) {
+                            "one_time" -> R.drawable.one_time
+                            "daily" -> R.drawable.daily
+                            "weekly" -> R.drawable.weekly
+                            "monthly" -> R.drawable.monthly
+                            else -> R.drawable.baseline_language_24 // Replace with a default icon if needed
+                        }),
                         contentDescription = text,
                         modifier = Modifier.size(20.dp)
                     )
@@ -100,3 +108,4 @@ fun SelectableOptionsRow() {
         }
     }
 }
+

@@ -6,7 +6,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import com.example.financecompose.R
 
-val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
 
@@ -21,10 +20,15 @@ val Pinkple = Color(0xFFA680AE)
 val TextColor = Color(0xFF49454F)
 val SymbolGray = Color(0xFF44474F)
 
-//val Purple90 = Color(0xFF6D31ED)
-val Purple90 = Color(0xFF004970)
+val Purple90 = Color(0xFF445E91)
 val Gray90 = Color(0xFFF5F1FE)
 val Gray50 = Color (0xFFBDC1CA)
+
+val Gray30 = Color(0xFFF7F7F7)
+
+val BlueSky= Color(0xFF4478a9)
+val NightSky =  Color(0xFF333333)
+val BorderColor = Color(0x40000000)
 
 val gradientBrush: Brush = Brush.linearGradient(
     colors = listOf(

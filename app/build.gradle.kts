@@ -107,6 +107,9 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation (libs.google.accompanist.flowlayout)
     implementation(libs.colorpicker.compose)
+    implementation (libs.androidx.work.runtime.ktx.v271)
+    implementation (libs.gson)
+
 
 
     // Testing dependencies

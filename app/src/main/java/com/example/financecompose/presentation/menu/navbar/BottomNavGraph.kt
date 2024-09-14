@@ -7,22 +7,22 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.financecompose.presentation.menu.child.ui.ChildScreen
-import com.example.financecompose.presentation.menu.add.ui.AddScreen
+import com.example.financecompose.presentation.menu.transaction.ui.AddScreen
 import com.example.financecompose.presentation.menu.home.ui.HomeScreen
 import com.example.financecompose.presentation.menu.reports.ui.ReportsScreen
 import com.example.financecompose.presentation.menu.settings.ui.SettingsScreen
 
 @Composable
-fun BottomNavGraph(navController: NavHostController) {
+fun BottomNavGraph(bottomNavController: NavHostController, parentNavController: NavHostController) {
     NavHost(
-        navController = navController,
+        navController = bottomNavController,
         startDestination = NavItem.Home.route,
         modifier = Modifier.fillMaxSize()
     ) {
-        composable(NavItem.Home.route) { HomeScreen(navController) }
-        composable(NavItem.Add.route) { AddScreen(navController) }
-        composable(NavItem.Child.route) { ChildScreen(navController) }
-        composable(NavItem.Reports.route) { ReportsScreen(navController) }
-        composable(NavItem.Settings.route) { SettingsScreen(navController) }
+        composable(NavItem.Home.route) { HomeScreen(parentNavController) }
+        composable(NavItem.Transaction.route) { AddScreen(bottomNavController) }
+        composable(NavItem.Child.route) { ChildScreen(bottomNavController) }
+        composable(NavItem.Reports.route) { ReportsScreen(bottomNavController) }
+        composable(NavItem.Settings.route) { SettingsScreen(bottomNavController, parentNavController) }
     }
 }
